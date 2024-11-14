@@ -38,6 +38,36 @@ server.post("/addFarmer", (req, res) => {
         });
 });
 
+server.post("/addIssues", (req, res) => {
+    const { issueID, issueName, farmerID, farmerName } = req.body;
+
+    // Check if all required fields are provided
+    if (!issueID || !issueName || !farmerID || !farmerName) {
+        return res
+            .status(400)
+            .send(
+                "All fields (issueID, issueName, farmerID, farmerName) are required."
+            );
+    }
+
+    // Reference to the Issues node in the Firebase Database
+    const issuesRef = ref(database, `Issues/${issueID}`);
+
+    // Set the data in the database
+    set(issuesRef, {
+        issueName,
+        farmerID,
+        farmerName,
+    })
+        .then(() => {
+            res.status(200).send("Issue added successfully.");
+        })
+        .catch((error) => {
+            console.error("Error adding issue:", error);
+            res.status(500).send("Failed to add issue.");
+        });
+});
+
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
