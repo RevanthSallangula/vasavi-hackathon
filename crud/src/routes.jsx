@@ -5,6 +5,7 @@ import {
     Routes,
     useParams,
 } from "react-router-dom";
+import Login from "./pages/Login";
 
 const DashboardWrapper = () => {
     // const { hallNumber } = useParams();
@@ -19,6 +20,7 @@ const AppRoutes = () => {
                     path="/hall/:hallNumber"
                     element={<DashboardWrapper />}
                 /> */}
+                <Route path="/login" element={<Login />} />
             </Routes>
         </Router>
     );
