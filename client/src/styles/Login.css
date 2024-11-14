@@ -9,7 +9,7 @@ body {
 
 .container {
     max-width: 600px;
-    margin: auto;
+    margin: 5% 0%;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
@@ -25,8 +25,8 @@ h2 {
     padding: 10px 15px;
     margin: 10px 5px;
     cursor: pointer;
-    background-color: #4caf50;
-    color: white;
+    background-color: #4caf50 !important;
+    color: rgb(255, 255, 255) !important;
     border: none;
     border-radius: 5px;
     text-align: center;
