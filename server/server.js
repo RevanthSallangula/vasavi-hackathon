@@ -28,7 +28,7 @@ server.post("/addFarmer", (req, res) => {
             .send("All fields (id, name, age, location) are required.");
     }
     const farmerRef = ref(database, `farmers/${id}`);
-    set(farmerRef, { name, age, location })
+    set(farmerRef, { id, name, age, location })
         .then(() => {
             res.status(200).send("Farmer added successfully.");
         })
