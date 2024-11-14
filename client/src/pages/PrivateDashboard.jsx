@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/PrivateDashboard.css";
-import SidebarComponent from "../components/SidebarComponent";
+import SidebarPrivate from "../components/SidebarPrivate";
 
 const HandleGetIssues = ({ view, issues }) => {
     if (!issues || typeof issues !== "object") {
@@ -106,7 +106,7 @@ function PrivateDashboard() {
     return (
         <div className="private-dashboard-home">
             <div className="sidebar">
-                <SidebarComponent onClick={handleSidebarClick} />
+                <SidebarPrivate onClick={handleSidebarClick} />
             </div>
 
             <div className="private-view-content">
