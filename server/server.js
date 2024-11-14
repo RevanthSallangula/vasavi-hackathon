@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { initializeApp } = require("firebase/app");
-const { getDatabase, ref, set } = require("firebase/database");
+const { getDatabase, ref, get, set, push } = require("firebase/database");
 
 const firebaseConfig = {
     apiKey: "AIzaSyCzGM4wrLwmkfKFeeVVBZHRJyA1JOZQL_8",
@@ -17,7 +17,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const server = express();
+const cors = require("cors"); // Import the cors package
+
 server.use(bodyParser.json());
+server.use(cors()); // Enable CORS for all origins
 
 server.post("/addFarmer", (req, res) => {
     const { id, name, age, location } = req.body;
@@ -51,20 +54,61 @@ server.post("/addIssues", (req, res) => {
     }
 
     // Reference to the Issues node in the Firebase Database
-    const issuesRef = ref(database, `Issues/${issueID}`);
+    const issuesRef = ref(database, "Issues");
 
-    // Set the data in the database
-    set(issuesRef, {
-        issueName,
-        farmerID,
-        farmerName,
-    })
-        .then(() => {
-            res.status(200).send("Issue added successfully.");
+    // Fetch current issues to determine the next index
+    get(issuesRef)
+        .then((snapshot) => {
+            let nextIndex = 0;
+            if (snapshot.exists()) {
+                // Find the next available index (sequential)
+                const issues = snapshot.val();
+                nextIndex = Object.keys(issues).length;
+            }
+
+            // Create the new issue object
+            const newIssue = {
+                issueID,
+                issueName,
+                farmerID,
+                farmerName,
+                assignedID: "None", // Default value for assignedID
+                assignedName: "None", // Default value for assignedName
+                status: "open", // Default value for status
+            };
+
+            // Use the next index as the key
+            set(ref(database, `Issues/${nextIndex}`), newIssue)
+                .then(() => {
+                    res.status(200).send("Issue added successfully.");
+                })
+                .catch((error) => {
+                    console.error("Error adding issue:", error);
+                    res.status(500).send("Failed to add issue.");
+                });
         })
         .catch((error) => {
-            console.error("Error adding issue:", error);
-            res.status(500).send("Failed to add issue.");
+            console.error("Error fetching issues:", error);
+            res.status(500).send("Failed to fetch issues.");
+        });
+});
+
+server.get("/getIssues", (req, res) => {
+    const issuesRef = ref(database, "Issues");
+
+    get(issuesRef)
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                const issues = snapshot.val();
+                const issuesArray = Object.values(issues); // Convert object to array
+                res.status(200).json(issuesArray); // Send issues as an array
+            } else {
+                res.status(404).send("No issues found");
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching issues:", error);
+            res.status(500).send("Failed to fetch issues");
         });
 });
 
