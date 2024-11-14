@@ -1,3 +1,5 @@
+import React from "react";
+import "../styles/SidebarComponent.css";
 import {
     CSidebar,
     CSidebarBrand,
@@ -20,7 +22,7 @@ import {
 const SidebarComponent = () => {
     return (
         <div>
-            <CSidebar className="border-end">
+            <CSidebar className="border-end sidebar-full-height">
                 <CSidebarHeader className="border-bottom">
                     <CSidebarBrand>CoreUI</CSidebarBrand>
                 </CSidebarHeader>
