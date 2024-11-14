@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import Login from "./pages/Login";
 import PrivateDashboard from "./pages/PrivateDashboard";
-
+import Home from "./pages/Home";
 const DashboardWrapper = () => {
     // const { hallNumber } = useParams();
     // return <Dashboard hallID={hallNumber} />;
@@ -22,6 +22,8 @@ const AppRoutes = () => {
                     element={<DashboardWrapper />}
                 /> */}
                 <Route path="/login" element={<Login />} />
+                <Route path="/home" element={<Home />} />
+
                 <Route
                     path="/privateDashboard"
                     element={<PrivateDashboard />}
