@@ -21,27 +21,21 @@ const SidebarComponent = ({ onClick }) => {
                 </CSidebarHeader>
                 <CSidebarNav>
                     <CNavTitle>Sidebar</CNavTitle>
-                    <CNavItem href="#" onClick={() => onClick("Open Issues")}>
+                    <CNavItem href="#" onClick={() => onClick("open")}>
                         <CIcon
                             customClassName="nav-icon"
                             icon={cilSpeedometer}
                         />{" "}
                         Open Issues
                     </CNavItem>
-                    <CNavItem
-                        href="#"
-                        onClick={() => onClick("Issues in Progress")}
-                    >
+                    <CNavItem href="#" onClick={() => onClick("inProgress")}>
                         <CIcon
                             customClassName="nav-icon"
                             icon={cilSpeedometer}
                         />{" "}
                         Issues in Progress
                     </CNavItem>
-                    <CNavItem
-                        href="#"
-                        onClick={() => onClick("Completed Issues")}
-                    >
+                    <CNavItem href="#" onClick={() => onClick("completed")}>
                         <CIcon
                             customClassName="nav-icon"
                             icon={cilSpeedometer}
