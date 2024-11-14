@@ -1,6 +1,5 @@
-// HandleGetIssues.jsx
 import React, { useEffect, useState } from "react";
-
+import "../styles/handleGetIssues.css";
 const HandleGetIssues = () => {
     const [issues, setIssues] = useState({
         open: [],
@@ -38,6 +37,7 @@ const HandleGetIssues = () => {
 
     return (
         <div>
+            {/* Open Issues */}
             <div>
                 <h4>Open Issues</h4>
                 {issues.open.length === 0 ? (
@@ -45,33 +45,104 @@ const HandleGetIssues = () => {
                 ) : (
                     <ul>
                         {issues.open.map((issue, index) => (
-                            <li key={index}>{issue.issueName}</li>
+                            <li key={index}>
+                                <div className="issue-item">
+                                    <h2>Issue Tracker</h2>
+                                    <div className="data">
+                                        <strong>Issue ID:</strong>{" "}
+                                        {issue.issueID}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Issue Name:</strong>{" "}
+                                        {issue.issueName}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Farmer ID:</strong>{" "}
+                                        {issue.farmerID}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Farmer Name:</strong>{" "}
+                                        {issue.farmerName}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Status:</strong> {issue.status}
+                                    </div>
+                                </div>
+                            </li>
                         ))}
                     </ul>
                 )}
             </div>
 
+            {/* Issues in Progress */}
             <div>
                 <h4>Issues in Progress</h4>
                 {issues.inProgress.length === 0 ? (
                     <p>No issues in progress</p>
                 ) : (
                     <ul>
-                        {issues.inProgress.map((issue, index) => (
-                            <li key={index}>{issue.issueName}</li>
+                        {issues.open.map((issue, index) => (
+                            <li key={index}>
+                                <div className="issue-item">
+                                    <h2>Issue Tracker</h2>
+                                    <div className="data">
+                                        <strong>Issue ID:</strong>{" "}
+                                        {issue.issueID}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Issue Name:</strong>{" "}
+                                        {issue.issueName}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Farmer ID:</strong>{" "}
+                                        {issue.farmerID}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Farmer Name:</strong>{" "}
+                                        {issue.farmerName}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Status:</strong> {issue.status}
+                                    </div>
+                                </div>
+                            </li>
                         ))}
                     </ul>
                 )}
             </div>
 
+            {/* Completed Issues */}
             <div>
                 <h4>Completed Issues</h4>
                 {issues.completed.length === 0 ? (
                     <p>No completed issues found</p>
                 ) : (
                     <ul>
-                        {issues.completed.map((issue, index) => (
-                            <li key={index}>{issue.issueName}</li>
+                        {issues.open.map((issue, index) => (
+                            <li key={index}>
+                                <div className="issue-item">
+                                    <h2>Issue Tracker</h2>
+                                    <div className="data">
+                                        <strong>Issue ID:</strong>{" "}
+                                        {issue.issueID}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Issue Name:</strong>{" "}
+                                        {issue.issueName}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Farmer ID:</strong>{" "}
+                                        {issue.farmerID}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Farmer Name:</strong>{" "}
+                                        {issue.farmerName}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Status:</strong> {issue.status}
+                                    </div>
+                                </div>
+                            </li>
                         ))}
                     </ul>
                 )}
