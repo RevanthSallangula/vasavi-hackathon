@@ -26,6 +26,13 @@ const SidebarGovernment = ({ onClick }) => {
                             customClassName="nav-icon"
                             icon={cilSpeedometer}
                         />{" "}
+                        Your Farmers
+                    </CNavItem>
+                    <CNavItem href="#" onClick={() => onClick("open")}>
+                        <CIcon
+                            customClassName="nav-icon"
+                            icon={cilSpeedometer}
+                        />{" "}
                         Open Issues
                     </CNavItem>
                     <CNavItem href="#" onClick={() => onClick("inProgress")}>
