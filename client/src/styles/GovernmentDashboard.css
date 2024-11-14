@@ -1,4 +1,4 @@
-.private-dashboard-home {
+.government-dashboard-home {
     display: flex;
 }
 
@@ -7,7 +7,7 @@
     position: absolute;
 }
 
-.private-view-content {
+.governemnt-view-content {
     display: flex;
     justify-content: center;
     width: 100%;

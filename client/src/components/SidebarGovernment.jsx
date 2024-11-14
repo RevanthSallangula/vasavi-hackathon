@@ -12,7 +12,7 @@ import {
 import { CIcon } from "@coreui/icons-react";
 import { cilSpeedometer } from "@coreui/icons";
 
-const SidebarComponent = ({ onClick }) => {
+const SidebarPrivate = ({}) => {
     return (
         <div>
             <CSidebar className="border-end sidebar-full-height">
@@ -21,32 +21,12 @@ const SidebarComponent = ({ onClick }) => {
                 </CSidebarHeader>
                 <CSidebarNav>
                     <CNavTitle>Sidebar</CNavTitle>
-                    <CNavItem href="#" onClick={() => onClick("Open Issues")}>
+                    <CNavItem href="#">
                         <CIcon
                             customClassName="nav-icon"
                             icon={cilSpeedometer}
                         />{" "}
-                        Open Issues
-                    </CNavItem>
-                    <CNavItem
-                        href="#"
-                        onClick={() => onClick("Issues in Progress")}
-                    >
-                        <CIcon
-                            customClassName="nav-icon"
-                            icon={cilSpeedometer}
-                        />{" "}
-                        Issues in Progress
-                    </CNavItem>
-                    <CNavItem
-                        href="#"
-                        onClick={() => onClick("Completed Issues")}
-                    >
-                        <CIcon
-                            customClassName="nav-icon"
-                            icon={cilSpeedometer}
-                        />{" "}
-                        Completed Issues
+                        Add a Farmer
                     </CNavItem>
                 </CSidebarNav>
                 <CSidebarHeader className="border-top">
@@ -57,4 +37,4 @@ const SidebarComponent = ({ onClick }) => {
     );
 };
 
-export default SidebarComponent;
+export default SidebarPrivate;
