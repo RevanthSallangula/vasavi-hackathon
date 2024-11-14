@@ -8,18 +8,11 @@ import {
     CSidebarToggler,
     CNavItem,
     CNavTitle,
-    CNavGroup,
-    CBadge,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
-import {
-    cilSpeedometer,
-    cilPuzzle,
-    cilCloudDownload,
-    cilLayers,
-} from "@coreui/icons";
+import { cilSpeedometer } from "@coreui/icons";
 
-const SidebarComponent = () => {
+const SidebarComponent = ({ onClick }) => {
     return (
         <div>
             <CSidebar className="border-end sidebar-full-height">
@@ -28,21 +21,27 @@ const SidebarComponent = () => {
                 </CSidebarHeader>
                 <CSidebarNav>
                     <CNavTitle>Sidebar</CNavTitle>
-                    <CNavItem href="#">
+                    <CNavItem href="#" onClick={() => onClick("Open Issues")}>
                         <CIcon
                             customClassName="nav-icon"
                             icon={cilSpeedometer}
                         />{" "}
                         Open Issues
                     </CNavItem>
-                    <CNavItem href="#">
+                    <CNavItem
+                        href="#"
+                        onClick={() => onClick("Issues in Progress")}
+                    >
                         <CIcon
                             customClassName="nav-icon"
                             icon={cilSpeedometer}
                         />{" "}
                         Issues in Progress
                     </CNavItem>
-                    <CNavItem href="#">
+                    <CNavItem
+                        href="#"
+                        onClick={() => onClick("Completed Issues")}
+                    >
                         <CIcon
                             customClassName="nav-icon"
                             icon={cilSpeedometer}
