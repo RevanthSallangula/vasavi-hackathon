@@ -6,7 +6,7 @@ import {
     useParams,
 } from "react-router-dom";
 import Login from "./pages/Login";
-import PrivateView from "./pages/PrivateView";
+import PrivateDashboard from "./pages/PrivateDashboard";
 
 const DashboardWrapper = () => {
     // const { hallNumber } = useParams();
@@ -22,7 +22,10 @@ const AppRoutes = () => {
                     element={<DashboardWrapper />}
                 /> */}
                 <Route path="/login" element={<Login />} />
-                <Route path="/privateView" element={<PrivateView />} />
+                <Route
+                    path="/privateDashboard"
+                    element={<PrivateDashboard />}
+                />
             </Routes>
         </Router>
     );

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../styles/PrivateView.css";
 import SidebarComponent from "../components/SidebarComponent";
 
-function PrivateView() {
+function PrivateDashboard() {
     return (
         <div>
             <div className="sidebar">
@@ -13,4 +13,4 @@ function PrivateView() {
     );
 }
 
-export default PrivateView;
+export default PrivateDashboard;

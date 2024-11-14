@@ -24,58 +24,30 @@ const SidebarComponent = () => {
         <div>
             <CSidebar className="border-end sidebar-full-height">
                 <CSidebarHeader className="border-bottom">
-                    <CSidebarBrand>CoreUI</CSidebarBrand>
+                    <CSidebarBrand>PROJECT TITLE</CSidebarBrand>
                 </CSidebarHeader>
                 <CSidebarNav>
-                    <CNavTitle>Nav Title</CNavTitle>
+                    <CNavTitle>Sidebar</CNavTitle>
                     <CNavItem href="#">
                         <CIcon
                             customClassName="nav-icon"
                             icon={cilSpeedometer}
                         />{" "}
-                        Nav item
+                        Open Issues
                     </CNavItem>
                     <CNavItem href="#">
                         <CIcon
                             customClassName="nav-icon"
                             icon={cilSpeedometer}
                         />{" "}
-                        With badge <CBadge color="primary ms-auto">NEW</CBadge>
+                        Issues in Progress
                     </CNavItem>
-                    <CNavGroup
-                        toggler={
-                            <>
-                                <CIcon
-                                    customClassName="nav-icon"
-                                    icon={cilPuzzle}
-                                />{" "}
-                                Nav dropdown
-                            </>
-                        }
-                    >
-                        <CNavItem href="#">
-                            <span className="nav-icon">
-                                <span className="nav-icon-bullet"></span>
-                            </span>{" "}
-                            Nav dropdown item
-                        </CNavItem>
-                        <CNavItem href="#">
-                            <span className="nav-icon">
-                                <span className="nav-icon-bullet"></span>
-                            </span>{" "}
-                            Nav dropdown item
-                        </CNavItem>
-                    </CNavGroup>
-                    <CNavItem href="https://coreui.io">
+                    <CNavItem href="#">
                         <CIcon
                             customClassName="nav-icon"
-                            icon={cilCloudDownload}
+                            icon={cilSpeedometer}
                         />{" "}
-                        Download CoreUI
-                    </CNavItem>
-                    <CNavItem href="https://coreui.io/pro/">
-                        <CIcon customClassName="nav-icon" icon={cilLayers} />{" "}
-                        Try CoreUI PRO
+                        Completed Issues
                     </CNavItem>
                 </CSidebarNav>
                 <CSidebarHeader className="border-top">
