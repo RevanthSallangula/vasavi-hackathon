@@ -23,21 +23,43 @@ server.use(bodyParser.json());
 server.use(cors()); // Enable CORS for all origins
 
 server.post("/addFarmer", (req, res) => {
-    const { id, name, age, location } = req.body;
+    const {
+        farmerID,
+        farmerName,
+        farmerAge,
+        farmerLocation,
+        farmerFieldArea,
+        FarmerCropType,
+    } = req.body;
 
-    if (!id || !name || !age || !location) {
-        return res
-            .status(400)
-            .send("All fields (id, name, age, location) are required.");
+    if (
+        !farmerID ||
+        !farmerName ||
+        !farmerAge ||
+        !farmerLocation ||
+        !farmerFieldArea ||
+        !FarmerCropType
+    ) {
+        return res.status(400).json({
+            message:
+                "All fields (farmerID, farmerName, farmerAge, farmerLocation, farmerFieldArea, FarmerCropType) are required.",
+        });
     }
-    const farmerRef = ref(database, `farmers/${id}`);
-    set(farmerRef, { name, age, location })
+
+    const farmerRef = ref(database, `farmers/${farmerID}`);
+    set(farmerRef, {
+        farmerName,
+        farmerAge,
+        farmerLocation,
+        farmerFieldArea,
+        FarmerCropType,
+    })
         .then(() => {
-            res.status(200).send("Farmer added successfully.");
+            res.status(200).json({ message: "Farmer added successfully." });
         })
         .catch((error) => {
             console.error("Error adding farmer:", error);
-            res.status(500).send("Failed to add farmer.");
+            res.status(500).json({ message: "Failed to add farmer." });
         });
 });
 
