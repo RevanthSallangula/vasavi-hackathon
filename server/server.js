@@ -210,6 +210,11 @@ server.put("/updateIssueStatus", async (req, res) => {
     }
 });
 
+server.post("/logInput", (req, res) => {
+    console.log("Received Input:", req.body); // Log the input to the console
+    res.status(200).json({ message: "Input logged successfully." });
+});
+
 // Start the server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
