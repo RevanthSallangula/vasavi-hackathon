@@ -9,7 +9,8 @@ function PrivateDashboard() {
         farmerAge: "",
         farmerLocation: "",
         farmerFieldArea: "",
-        FarmerCropType: "",
+        farmerCropType: "", // Changed to camelCase
+        farmerClient: "", // Corrected name
     });
 
     // Handle input changes
@@ -30,13 +31,13 @@ function PrivateDashboard() {
             !farmerData.farmerAge ||
             !farmerData.farmerLocation ||
             !farmerData.farmerFieldArea ||
-            !farmerData.FarmerCropType
+            !farmerData.farmerCropType || // Updated to camelCase
+            !farmerData.farmerClient
         ) {
             alert("All fields are required.");
             return;
         }
 
-        // Make the POST request to localhost:3000/addFarmer
         fetch("http://localhost:3000/addFarmer", {
             method: "POST",
             headers: {
@@ -44,21 +45,21 @@ function PrivateDashboard() {
             },
             body: JSON.stringify(farmerData),
         })
-            .then((response) => response.json()) // Parse JSON response
+            .then((response) => response.json())
             .then((data) => {
                 if (data.message === "Farmer added successfully.") {
-                    alert(data.message); // Success message from backend
-                    // Reset form after successful addition
+                    alert(data.message);
                     setFarmerData({
                         farmerName: "",
                         farmerID: "",
                         farmerAge: "",
                         farmerLocation: "",
                         farmerFieldArea: "",
-                        FarmerCropType: "",
+                        farmerCropType: "", // Updated
+                        farmerClient: "", // Updated
                     });
                 } else {
-                    alert(data.message); // Error message from backend
+                    alert(data.message);
                 }
             })
             .catch((error) => {
@@ -112,9 +113,16 @@ function PrivateDashboard() {
                 />
                 <input
                     type="text"
-                    name="FarmerCropType"
-                    value={farmerData.FarmerCropType}
+                    name="farmerCropType" // Updated
+                    value={farmerData.farmerCropType}
                     placeholder="Farmer Crop Type"
+                    onChange={handleChange}
+                />
+                <input
+                    type="text"
+                    name="farmerClient" // Updated
+                    value={farmerData.farmerClient}
+                    placeholder="Farmer Client"
                     onChange={handleChange}
                 />
                 <button className="btn" onClick={addFarmer}>
