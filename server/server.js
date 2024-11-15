@@ -102,22 +102,13 @@ server.get("/getFarmers", async (req, res) => {
 
 // Add Issue
 server.post("/addIssues", async (req, res) => {
-    const { issueID, issueName, farmerID, farmerName, issueDescription } =
-        req.body;
-
-    // Validate required fields
-    if (
-        !issueID ||
-        !issueName ||
-        !farmerID ||
-        !farmerName ||
-        !issueDescription
-    ) {
-        return res.status(400).json({
-            message:
-                "All fields (issueID, issueName, farmerID, farmerName, issueDescription) are required.",
-        });
-    }
+    const {
+        issueID = "None",
+        issueName = "None",
+        farmerID = "None",
+        farmerName = "None",
+        issueDescription = "None",
+    } = req.body;
 
     try {
         const issuesRef = ref(database, "Issues");
