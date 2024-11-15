@@ -96,6 +96,7 @@ const HandleViewContent = ({ view, issues, farmers }) => {
                                     <div className="data">
                                         <strong>Status:</strong> {issue.status}
                                     </div>
+                                    <button>OK</button>
                                 </div>
                             </li>
                         ))}
