@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/PrivateDashboard.css";
 import SidebarPrivate from "../components/SidebarPrivate";
 
-const HandleViewContent = ({ view, issues, farmers }) => {
+const HandleViewContent = ({ view, issues, farmers, updateIssueStatus }) => {
     if (view === "farmers") {
         if (!farmers || farmers.length === 0) {
             return <p>No farmers found.</p>;
@@ -96,7 +96,15 @@ const HandleViewContent = ({ view, issues, farmers }) => {
                                     <div className="data">
                                         <strong>Status:</strong> {issue.status}
                                     </div>
-                                    <button>OK</button>
+                                    {view !== "completed" && (
+                                        <button
+                                            onClick={() =>
+                                                updateIssueStatus(issue.issueID)
+                                            }
+                                        >
+                                            OK
+                                        </button>
+                                    )}
                                 </div>
                             </li>
                         ))}
@@ -135,7 +143,7 @@ function PrivateDashboard() {
                         categorizedIssues.open.push(issue);
                     } else if (issue.status === "taken") {
                         categorizedIssues.inProgress.push(issue);
-                    } else if (issue.status === "finished") {
+                    } else if (issue.status === "completed") {
                         categorizedIssues.completed.push(issue);
                     }
                 });
@@ -146,7 +154,7 @@ function PrivateDashboard() {
             .catch((error) => console.error("Error fetching issues:", error));
     }, []);
 
-    // Fetch farmers when the "Your Farmers" view is selected
+    // Fetch farmers
     useEffect(() => {
         fetch("http://localhost:3000/getFarmers")
             .then((response) => response.json())
@@ -155,7 +163,47 @@ function PrivateDashboard() {
                 console.log("Farmers", farmers);
             })
             .catch((error) => console.error("Error fetching farmers:", error));
-    }, [selectedView]);
+    }, []);
+
+    // Update issue status
+    const updateIssueStatus = (issueID) => {
+        fetch("http://localhost:3000/updateIssueStatus", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ issueID }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data.message);
+                // Re-fetch issues after status update
+                fetch("http://localhost:3000/getIssues")
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const categorizedIssues = {
+                            open: [],
+                            inProgress: [],
+                            completed: [],
+                        };
+
+                        data.forEach((issue) => {
+                            if (issue.status === "open") {
+                                categorizedIssues.open.push(issue);
+                            } else if (issue.status === "taken") {
+                                categorizedIssues.inProgress.push(issue);
+                            } else if (issue.status === "completed") {
+                                categorizedIssues.completed.push(issue);
+                            }
+                        });
+
+                        setIssues(categorizedIssues);
+                    });
+            })
+            .catch((error) =>
+                console.error("Error updating issue status:", error)
+            );
+    };
 
     const handleSidebarClick = (view) => {
         setSelectedView(view);
@@ -172,6 +220,7 @@ function PrivateDashboard() {
                     view={selectedView}
                     issues={issues}
                     farmers={farmers}
+                    updateIssueStatus={updateIssueStatus}
                 />
             </div>
         </div>

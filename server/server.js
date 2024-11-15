@@ -159,6 +159,57 @@ server.get("/getIssues", async (req, res) => {
     }
 });
 
+// Update Issue Status
+server.put("/updateIssueStatus", async (req, res) => {
+    const { issueID } = req.body;
+
+    // Validate required field
+    if (!issueID) {
+        return res.status(400).json({ message: "issueID is required." });
+    }
+
+    try {
+        const issuesRef = ref(database, "Issues");
+        const snapshot = await get(issuesRef);
+
+        if (snapshot.exists()) {
+            const issues = snapshot.val();
+            const issueKey = Object.keys(issues).find(
+                (key) => issues[key].issueID === issueID
+            );
+
+            if (!issueKey) {
+                return res.status(404).json({ message: "Issue not found." });
+            }
+
+            const currentStatus = issues[issueKey].status;
+
+            let newStatus;
+            if (currentStatus === "open") {
+                newStatus = "taken";
+            } else if (currentStatus === "taken") {
+                newStatus = "completed";
+            } else {
+                return res
+                    .status(400)
+                    .json({ message: "Issue is already completed." });
+            }
+
+            // Update the issue's status in the database
+            await set(ref(database, `Issues/${issueKey}/status`), newStatus);
+
+            res.status(200).json({
+                message: `Issue status updated successfully to ${newStatus}.`,
+            });
+        } else {
+            res.status(404).json({ message: "No issues found." });
+        }
+    } catch (error) {
+        console.error("Error updating issue status:", error);
+        res.status(500).json({ message: "Failed to update issue status." });
+    }
+});
+
 // Start the server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
