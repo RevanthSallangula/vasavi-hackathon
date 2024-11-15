@@ -76,6 +76,30 @@ server.post("/addFarmer", async (req, res) => {
     }
 });
 
+// Get Farmers
+server.get("/getFarmers", async (req, res) => {
+    try {
+        const farmersRef = ref(database, "farmers");
+        const snapshot = await get(farmersRef);
+
+        if (snapshot.exists()) {
+            const farmers = snapshot.val();
+            const farmersArray = Object.entries(farmers).map(
+                ([id, details]) => ({
+                    farmerID: id,
+                    ...details,
+                })
+            ); // Include the farmerID in each farmer's details
+            res.status(200).json(farmersArray);
+        } else {
+            res.status(404).json({ message: "No farmers found." });
+        }
+    } catch (error) {
+        console.error("Error fetching farmers:", error);
+        res.status(500).json({ message: "Failed to fetch farmers." });
+    }
+});
+
 // Add Issue
 server.post("/addIssues", async (req, res) => {
     const { issueID, issueName, farmerID, farmerName } = req.body;

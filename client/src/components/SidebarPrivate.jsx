@@ -21,13 +21,14 @@ const SidebarGovernment = ({ onClick }) => {
                 </CSidebarHeader>
                 <CSidebarNav>
                     <CNavTitle>Sidebar</CNavTitle>
-                    <CNavItem href="#" onClick={() => onClick("open")}>
+                    <CNavItem href="#" onClick={() => onClick("farmers")}>
                         <CIcon
                             customClassName="nav-icon"
                             icon={cilSpeedometer}
                         />{" "}
                         Your Farmers
                     </CNavItem>
+
                     <CNavItem href="#" onClick={() => onClick("open")}>
                         <CIcon
                             customClassName="nav-icon"
