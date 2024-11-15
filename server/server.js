@@ -102,13 +102,20 @@ server.get("/getFarmers", async (req, res) => {
 
 // Add Issue
 server.post("/addIssues", async (req, res) => {
-    const { issueID, issueName, farmerID, farmerName } = req.body;
+    const { issueID, issueName, farmerID, farmerName, issueDescription } =
+        req.body;
 
     // Validate required fields
-    if (!issueID || !issueName || !farmerID || !farmerName) {
+    if (
+        !issueID ||
+        !issueName ||
+        !farmerID ||
+        !farmerName ||
+        !issueDescription
+    ) {
         return res.status(400).json({
             message:
-                "All fields (issueID, issueName, farmerID, farmerName) are required.",
+                "All fields (issueID, issueName, farmerID, farmerName, issueDescription) are required.",
         });
     }
 
@@ -127,6 +134,7 @@ server.post("/addIssues", async (req, res) => {
             issueName,
             farmerID,
             farmerName,
+            issueDescription,
             assignedID: "None",
             assignedName: "None",
             status: "open",
