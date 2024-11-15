@@ -2,63 +2,119 @@ import React, { useState, useEffect } from "react";
 import "../styles/PrivateDashboard.css";
 import SidebarPrivate from "../components/SidebarPrivate";
 
-const HandleGetIssues = ({ view, issues }) => {
-    if (!issues || typeof issues !== "object") {
-        return <p>Invalid issues data</p>;
-    }
+const HandleViewContent = ({ view, issues, farmers, updateIssueStatus }) => {
+    if (view === "farmers") {
+        if (!farmers || farmers.length === 0) {
+            return <p>No farmers found.</p>;
+        }
 
-    const filteredIssues = issues[view] || []; // view will be 'open', 'inProgress', or 'completed'
-
-    return (
-        <div className="issues-container">
-            <h4>
-                {view === "open"
-                    ? "Open Issues"
-                    : view === "inProgress"
-                    ? "Issues in Progress"
-                    : "Completed Issues"}
-            </h4>
-            {filteredIssues.length === 0 ? (
-                <p>
-                    No{" "}
-                    {view === "open"
-                        ? "open"
-                        : view === "inProgress"
-                        ? "issues in progress"
-                        : "completed"}{" "}
-                    found
-                </p>
-            ) : (
+        return (
+            <div className="farmers-container">
+                <h4>Your Farmers</h4>
                 <ul>
-                    {filteredIssues.map((issue, index) => (
+                    {farmers.map((farmer, index) => (
                         <li key={index}>
-                            <div className="issue-item">
-                                <h2>Issue Tracker</h2>
+                            <div className="farmer-item">
+                                <h2>Farmer Details</h2>
                                 <div className="data">
-                                    <strong>Issue ID:</strong> {issue.issueID}
-                                </div>
-                                <div className="data">
-                                    <strong>Issue Name:</strong>{" "}
-                                    {issue.issueName}
-                                </div>
-                                <div className="data">
-                                    <strong>Farmer ID:</strong> {issue.farmerID}
+                                    <strong>Farmer ID:</strong>{" "}
+                                    {farmer.farmerID}
                                 </div>
                                 <div className="data">
                                     <strong>Farmer Name:</strong>{" "}
-                                    {issue.farmerName}
+                                    {farmer.farmerName}
                                 </div>
                                 <div className="data">
-                                    <strong>Status:</strong> {issue.status}
+                                    <strong>Age:</strong> {farmer.farmerAge}
+                                </div>
+                                <div className="data">
+                                    <strong>Location:</strong>{" "}
+                                    {farmer.farmerLocation}
+                                </div>
+                                <div className="data">
+                                    <strong>Field Area:</strong>{" "}
+                                    {farmer.farmerFieldArea}
+                                </div>
+                                <div className="data">
+                                    <strong>Crop Type:</strong>{" "}
+                                    {farmer.farmerCropType}
+                                </div>
+                                <div className="data">
+                                    <strong>Client:</strong>{" "}
+                                    {farmer.farmerClient}
                                 </div>
                             </div>
                         </li>
                     ))}
                 </ul>
-            )}
-        </div>
-    );
+            </div>
+        );
+    } else {
+        const filteredIssues = issues[view] || []; // view will be 'open', 'inProgress', or 'completed'
+
+        return (
+            <div className="issues-container">
+                <h4>
+                    {view === "open"
+                        ? "Open Issues"
+                        : view === "inProgress"
+                        ? "Issues in Progress"
+                        : "Completed Issues"}
+                </h4>
+                {filteredIssues.length === 0 ? (
+                    <p>
+                        No{" "}
+                        {view === "open"
+                            ? "open"
+                            : view === "inProgress"
+                            ? "issues in progress"
+                            : "completed"}{" "}
+                        issues found.
+                    </p>
+                ) : (
+                    <ul>
+                        {filteredIssues.map((issue, index) => (
+                            <li key={index}>
+                                <div className="issue-item">
+                                    <h2>Issue Tracker</h2>
+                                    <div className="data">
+                                        <strong>Issue ID:</strong>{" "}
+                                        {issue.issueID}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Issue Name:</strong>{" "}
+                                        {issue.issueName}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Farmer ID:</strong>{" "}
+                                        {issue.farmerID}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Farmer Name:</strong>{" "}
+                                        {issue.farmerName}
+                                    </div>
+                                    <div className="data">
+                                        <strong>Status:</strong> {issue.status}
+                                    </div>
+                                    {view !== "completed" && (
+                                        <button
+                                            onClick={() =>
+                                                updateIssueStatus(issue.issueID)
+                                            }
+                                        >
+                                            OK
+                                        </button>
+                                    )}
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+        );
+    }
 };
+
 function PrivateDashboard() {
     const [selectedView, setSelectedView] = useState("open"); // default view is 'open'
     const [issues, setIssues] = useState({
@@ -66,8 +122,9 @@ function PrivateDashboard() {
         inProgress: [],
         completed: [],
     });
+    const [farmers, setFarmers] = useState([]);
 
-    // Fetch the issues when the component mounts
+    // Fetch issues
     useEffect(() => {
         fetch("http://localhost:3000/getIssues")
             .then((response) => response.json())
@@ -86,7 +143,7 @@ function PrivateDashboard() {
                         categorizedIssues.open.push(issue);
                     } else if (issue.status === "taken") {
                         categorizedIssues.inProgress.push(issue);
-                    } else if (issue.status === "finished") {
+                    } else if (issue.status === "completed") {
                         categorizedIssues.completed.push(issue);
                     }
                 });
@@ -94,10 +151,59 @@ function PrivateDashboard() {
                 setIssues(categorizedIssues);
                 console.log(categorizedIssues, issues);
             })
-            .catch((error) => {
-                console.error("Error fetching issues:", error);
-            });
+            .catch((error) => console.error("Error fetching issues:", error));
     }, []);
+
+    // Fetch farmers
+    useEffect(() => {
+        fetch("http://localhost:3000/getFarmers")
+            .then((response) => response.json())
+            .then((data) => {
+                setFarmers(data);
+                console.log("Farmers", farmers);
+            })
+            .catch((error) => console.error("Error fetching farmers:", error));
+    }, []);
+
+    // Update issue status
+    const updateIssueStatus = (issueID) => {
+        fetch("http://localhost:3000/updateIssueStatus", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ issueID }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data.message);
+                // Re-fetch issues after status update
+                fetch("http://localhost:3000/getIssues")
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const categorizedIssues = {
+                            open: [],
+                            inProgress: [],
+                            completed: [],
+                        };
+
+                        data.forEach((issue) => {
+                            if (issue.status === "open") {
+                                categorizedIssues.open.push(issue);
+                            } else if (issue.status === "taken") {
+                                categorizedIssues.inProgress.push(issue);
+                            } else if (issue.status === "completed") {
+                                categorizedIssues.completed.push(issue);
+                            }
+                        });
+
+                        setIssues(categorizedIssues);
+                    });
+            })
+            .catch((error) =>
+                console.error("Error updating issue status:", error)
+            );
+    };
 
     const handleSidebarClick = (view) => {
         setSelectedView(view);
@@ -110,7 +216,12 @@ function PrivateDashboard() {
             </div>
 
             <div className="private-view-content">
-                <HandleGetIssues view={selectedView} issues={issues} />
+                <HandleViewContent
+                    view={selectedView}
+                    issues={issues}
+                    farmers={farmers}
+                    updateIssueStatus={updateIssueStatus}
+                />
             </div>
         </div>
     );
