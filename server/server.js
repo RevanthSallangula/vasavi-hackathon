@@ -76,10 +76,77 @@ server.post("/addFarmer", async (req, res) => {
     }
 });
 
+server.post("/addHiddenFarmer", async (req, res) => {
+    const {
+        farmerID,
+        farmerName,
+        farmerAge,
+        farmerLocation,
+        farmerFieldArea,
+        farmerCropType,
+        farmerClient,
+    } = req.body;
+
+    // Validate required fields
+    if (
+        !farmerID ||
+        !farmerName ||
+        !farmerAge ||
+        !farmerLocation ||
+        !farmerFieldArea ||
+        !farmerCropType ||
+        !farmerClient
+    ) {
+        return res.status(400).json({
+            message:
+                "All fields (farmerID, farmerName, farmerAge, farmerLocation, farmerFieldArea, farmerCropType, farmerClient) are required.",
+        });
+    }
+
+    try {
+        const farmerRef = ref(database, `hiddenFarmers/${farmerID}`);
+        await set(farmerRef, {
+            farmerName,
+            farmerAge,
+            farmerLocation,
+            farmerFieldArea,
+            farmerCropType,
+            farmerClient,
+        });
+        res.status(200).json({ message: "Farmer added successfully." });
+    } catch (error) {
+        console.error("Error adding farmer:", error);
+        res.status(500).json({ message: "Failed to add farmer." });
+    }
+});
+
 // Get Farmers
 server.get("/getFarmers", async (req, res) => {
     try {
         const farmersRef = ref(database, "farmers");
+        const snapshot = await get(farmersRef);
+
+        if (snapshot.exists()) {
+            const farmers = snapshot.val();
+            const farmersArray = Object.entries(farmers).map(
+                ([id, details]) => ({
+                    farmerID: id,
+                    ...details,
+                })
+            ); // Include the farmerID in each farmer's details
+            res.status(200).json(farmersArray);
+        } else {
+            res.status(404).json({ message: "No farmers found." });
+        }
+    } catch (error) {
+        console.error("Error fetching farmers:", error);
+        res.status(500).json({ message: "Failed to fetch farmers." });
+    }
+});
+
+server.get("/getHiddenFarmers", async (req, res) => {
+    try {
+        const farmersRef = ref(database, "hiddenFarmers");
         const snapshot = await get(farmersRef);
 
         if (snapshot.exists()) {
@@ -294,6 +361,60 @@ server.get("/getFarmerRequests", async (req, res) => {
     } catch (error) {
         console.error("Error fetching requests:", error);
         res.status(500).json({ message: "Failed to fetch requests." });
+    }
+});
+
+server.post("/approveFarmers", async (req, res) => {
+    const { farmerCropType, farmerFieldArea } = req.body;
+
+    // Validate required fields
+    if (!farmerCropType || !farmerFieldArea) {
+        return res.status(400).json({
+            message: "Both farmerCropType and farmerFieldArea are required.",
+        });
+    }
+
+    try {
+        const hiddenFarmersRef = ref(database, "hiddenFarmers");
+        const snapshot = await get(hiddenFarmersRef);
+
+        if (!snapshot.exists()) {
+            return res
+                .status(404)
+                .json({ message: "No hidden farmers found." });
+        }
+
+        const hiddenFarmers = snapshot.val();
+        const matchingFarmers = Object.entries(hiddenFarmers).filter(
+            ([id, farmer]) =>
+                farmer.farmerCropType === farmerCropType &&
+                farmer.farmerFieldArea === farmerFieldArea
+        );
+
+        if (matchingFarmers.length === 0) {
+            return res
+                .status(404)
+                .json({ message: "No matching hidden farmers found." });
+        }
+
+        // Move each matching farmer from hiddenFarmers to farmers
+        for (const [id, farmer] of matchingFarmers) {
+            const farmerRef = ref(database, `farmers/${id}`);
+            const hiddenFarmerRef = ref(database, `hiddenFarmers/${id}`);
+
+            // Add farmer to farmers
+            await set(farmerRef, farmer);
+
+            // Delete farmer from hiddenFarmers
+            await set(hiddenFarmerRef, null);
+        }
+
+        res.status(200).json({
+            message: `${matchingFarmers.length} farmers approved successfully.`,
+        });
+    } catch (error) {
+        console.error("Error approving farmers:", error);
+        res.status(500).json({ message: "Failed to approve farmers." });
     }
 });
 
