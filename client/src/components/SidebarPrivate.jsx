@@ -28,7 +28,13 @@ const SidebarPrivate = ({ onClick }) => {
                         />{" "}
                         Your Farmers
                     </CNavItem>
-
+                    <CNavItem href="#" onClick={() => onClick("requestFarmer")}>
+                        <CIcon
+                            customClassName="nav-icon"
+                            icon={cilSpeedometer}
+                        />{" "}
+                        Request Farmer
+                    </CNavItem>
                     <CNavItem href="#" onClick={() => onClick("open")}>
                         <CIcon
                             customClassName="nav-icon"
