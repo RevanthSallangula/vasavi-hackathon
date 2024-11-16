@@ -229,7 +229,7 @@ server.post("/getIssueStatus", async (req, res) => {
 
         if (snapshot.exists()) {
             const issues = snapshot.val();
-            console.log("Issues:", issues);
+            // console.log("Issues:", issues);
 
             const issueKey = Object.keys(issues).find(
                 (key) => String(issues[key].issueID) === String(issueID) // Convert both to string
