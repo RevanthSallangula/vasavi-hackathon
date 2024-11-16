@@ -365,13 +365,12 @@ server.get("/getFarmerRequests", async (req, res) => {
 });
 
 server.post("/approveFarmers", async (req, res) => {
-    const { farmerCropType, farmerFieldArea } = req.body; // Include requestID in the body
+    const { farmerCropType, farmerFieldArea } = req.body; // Only include crop type and field area in the body
 
     // Validate required fields
     if (!farmerCropType || !farmerFieldArea) {
         return res.status(400).json({
-            message:
-                "FarmerCropType, FarmerFieldArea, and RequestID are required.",
+            message: "FarmerCropType and FarmerFieldArea are required.",
         });
     }
 
@@ -388,8 +387,8 @@ server.post("/approveFarmers", async (req, res) => {
         const hiddenFarmers = snapshot.val();
         const matchingFarmers = Object.entries(hiddenFarmers).filter(
             ([id, farmer]) =>
-                farmer.farmerCropType == farmerCropType &&
-                farmer.farmerFieldArea == farmerFieldArea
+                farmer.farmerCropType === farmerCropType &&
+                farmer.farmerFieldArea === farmerFieldArea
         );
 
         if (matchingFarmers.length === 0) {
@@ -410,14 +409,37 @@ server.post("/approveFarmers", async (req, res) => {
             await set(hiddenFarmerRef, null);
         }
 
-        // Delete the farmer request from the 'farmerRequests' database
+        // Delete all requests that match the farmerCropType and farmerFieldArea
         const farmerRequestsRef = ref(database, "farmerRequests");
-        const requestRef = ref(farmerRequestsRef, requestID);
+        const requestSnapshot = await get(farmerRequestsRef);
 
-        await set(requestRef, null); // Delete the request
+        if (!requestSnapshot.exists()) {
+            return res
+                .status(404)
+                .json({ message: "No farmer requests found." });
+        }
+
+        const farmerRequests = requestSnapshot.val();
+        const matchingRequests = Object.entries(farmerRequests).filter(
+            ([id, request]) =>
+                request.farmerCropType == farmerCropType &&
+                request.farmerFieldArea == farmerFieldArea
+        );
+
+        if (matchingRequests.length === 0) {
+            return res
+                .status(404)
+                .json({ message: "No matching requests found." });
+        }
+
+        // Delete each matching request from farmerRequests
+        for (const [id] of matchingRequests) {
+            const requestRef = ref(farmerRequestsRef, id);
+            await set(requestRef, null); // Delete the request
+        }
 
         res.status(200).json({
-            message: `${matchingFarmers.length} farmers approved and request deleted successfully.`,
+            message: `${matchingFarmers.length} farmers approved and ${matchingRequests.length} requests deleted successfully.`,
         });
     } catch (error) {
         console.error("Error approving farmers:", error);
