@@ -9,9 +9,11 @@ function GovernmentDashboard() {
         farmerAge: "",
         farmerLocation: "",
         farmerFieldArea: "",
-        farmerCropType: "", // Changed to camelCase
-        farmerClient: "", // Corrected name
+        farmerCropType: "",
+        farmerClient: "",
     });
+
+    const [currentView, setCurrentView] = useState("addFarmer"); // Default view is "Add Farmer"
 
     // Handle input changes
     const handleChange = (e) => {
@@ -24,14 +26,13 @@ function GovernmentDashboard() {
 
     // Add farmer data via POST request
     const addFarmer = () => {
-        // Check if all fields are filled
         if (
             !farmerData.farmerName ||
             !farmerData.farmerID ||
             !farmerData.farmerAge ||
             !farmerData.farmerLocation ||
             !farmerData.farmerFieldArea ||
-            !farmerData.farmerCropType || // Updated to camelCase
+            !farmerData.farmerCropType ||
             !farmerData.farmerClient
         ) {
             alert("All fields are required.");
@@ -55,8 +56,8 @@ function GovernmentDashboard() {
                         farmerAge: "",
                         farmerLocation: "",
                         farmerFieldArea: "",
-                        farmerCropType: "", // Updated
-                        farmerClient: "", // Updated
+                        farmerCropType: "",
+                        farmerClient: "",
                     });
                 } else {
                     alert(data.message);
@@ -68,66 +69,78 @@ function GovernmentDashboard() {
             });
     };
 
+    // Handle Sidebar Click (Switch Views)
+    const handleSidebarClick = (view) => {
+        setCurrentView(view);
+    };
+
     return (
         <div className="government-dashboard-home">
             <div className="sidebar-div">
-                <SidebarGovernment />
+                <SidebarGovernment onClick={handleSidebarClick} />
             </div>
             <div className="government-view-content">
-                <h2>Government Dashboard</h2>
-                <h4>Add Farmer Details</h4>
-                <input
-                    type="text"
-                    name="farmerID"
-                    value={farmerData.farmerID}
-                    placeholder="Farmer ID"
-                    onChange={handleChange}
-                />
-                <input
-                    type="text"
-                    name="farmerName"
-                    value={farmerData.farmerName}
-                    placeholder="Farmer Name"
-                    onChange={handleChange}
-                />
-                <input
-                    type="text"
-                    name="farmerAge"
-                    value={farmerData.farmerAge}
-                    placeholder="Farmer Age"
-                    onChange={handleChange}
-                />
-                <input
-                    type="text"
-                    name="farmerLocation"
-                    value={farmerData.farmerLocation}
-                    placeholder="Farmer Location"
-                    onChange={handleChange}
-                />
-                <input
-                    type="text"
-                    name="farmerFieldArea"
-                    value={farmerData.farmerFieldArea}
-                    placeholder="Farmer Field Area"
-                    onChange={handleChange}
-                />
-                <input
-                    type="text"
-                    name="farmerCropType" // Updated
-                    value={farmerData.farmerCropType}
-                    placeholder="Farmer Crop Type"
-                    onChange={handleChange}
-                />
-                <input
-                    type="text"
-                    name="farmerClient" // Updated
-                    value={farmerData.farmerClient}
-                    placeholder="Farmer Client"
-                    onChange={handleChange}
-                />
-                <button className="btn" onClick={addFarmer}>
-                    Add Farmer
-                </button>
+                {currentView === "addFarmer" && (
+                    <div>
+                        <h2>Government Dashboard</h2>
+                        <h4>Add Farmer Details</h4>
+                        <input
+                            type="text"
+                            name="farmerID"
+                            value={farmerData.farmerID}
+                            placeholder="Farmer ID"
+                            onChange={handleChange}
+                        />
+                        <input
+                            type="text"
+                            name="farmerName"
+                            value={farmerData.farmerName}
+                            placeholder="Farmer Name"
+                            onChange={handleChange}
+                        />
+                        <input
+                            type="text"
+                            name="farmerAge"
+                            value={farmerData.farmerAge}
+                            placeholder="Farmer Age"
+                            onChange={handleChange}
+                        />
+                        <input
+                            type="text"
+                            name="farmerLocation"
+                            value={farmerData.farmerLocation}
+                            placeholder="Farmer Location"
+                            onChange={handleChange}
+                        />
+                        <input
+                            type="text"
+                            name="farmerFieldArea"
+                            value={farmerData.farmerFieldArea}
+                            placeholder="Farmer Field Area"
+                            onChange={handleChange}
+                        />
+                        <input
+                            type="text"
+                            name="farmerCropType"
+                            value={farmerData.farmerCropType}
+                            placeholder="Farmer Crop Type"
+                            onChange={handleChange}
+                        />
+                        <input
+                            type="text"
+                            name="farmerClient"
+                            value={farmerData.farmerClient}
+                            placeholder="Farmer Client"
+                            onChange={handleChange}
+                        />
+                        <button className="btn" onClick={addFarmer}>
+                            Add Farmer
+                        </button>
+                    </div>
+                )}
+                {currentView === "approveFarmers" && <div></div>}{" "}
+                {/* Empty div for approve farmers */}
+                {/* You can add more views here as per your requirement */}
             </div>
         </div>
     );

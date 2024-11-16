@@ -12,7 +12,7 @@ import {
 import { CIcon } from "@coreui/icons-react";
 import { cilSpeedometer } from "@coreui/icons";
 
-const SidebarGovernment = ({}) => {
+const SidebarGovernment = ({ onClick }) => {
     return (
         <div>
             <CSidebar className="border-end sidebar-full-height">
@@ -21,13 +21,30 @@ const SidebarGovernment = ({}) => {
                 </CSidebarHeader>
                 <CSidebarNav>
                     <CNavTitle>Sidebar</CNavTitle>
-                    <CNavItem href="#">
+                    <CNavItem href="#" onClick={() => onClick("addFarmer")}>
                         <CIcon
                             customClassName="nav-icon"
                             icon={cilSpeedometer}
                         />{" "}
                         Add a Farmer
                     </CNavItem>
+                    <CNavItem
+                        href="#"
+                        onClick={() => onClick("approveFarmers")}
+                    >
+                        <CIcon
+                            customClassName="nav-icon"
+                            icon={cilSpeedometer}
+                        />{" "}
+                        Approve Farmers
+                    </CNavItem>
+                    {/* <CNavItem href="#" onClick={() => onClick("farmers")}>
+                        <CIcon
+                            customClassName="nav-icon"
+                            icon={cilSpeedometer}
+                        />{" "}
+                        Your Farmers
+                    </CNavItem> */}
                 </CSidebarNav>
                 <CSidebarHeader className="border-top">
                     <CSidebarToggler />
