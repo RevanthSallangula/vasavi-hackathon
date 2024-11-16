@@ -12,7 +12,7 @@ import {
 import { CIcon } from "@coreui/icons-react";
 import { cilSpeedometer } from "@coreui/icons";
 
-const SidebarPrivate = ({}) => {
+const SidebarGovernment = ({}) => {
     return (
         <div>
             <CSidebar className="border-end sidebar-full-height">
@@ -37,4 +37,4 @@ const SidebarPrivate = ({}) => {
     );
 };
 
-export default SidebarPrivate;
+export default SidebarGovernment;
