@@ -1,18 +1,3 @@
-.private-dashboard-home {
-    display: flex;
-}
-
-.sidebar {
-    display: block;
-    position: absolute;
-}
-
-.private-view-content {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
 .issue-item {
     background-color: #fff;
     padding: 20px;
@@ -54,4 +39,28 @@ li {
     max-width: 600px;
     margin: 35px auto;
     width: auto;
+}
+
+.sidebar-div {
+    position: fixed; /* Fix the sidebar to the viewport */
+    top: 0; /* Align it to the top of the screen */
+    left: 0; /* Align it to the left of the screen */
+    height: 100vh; /* Take full height of the viewport */
+    width: 250px; /* Define a fixed width for the sidebar */
+    background-color: #f8f9fa; /* Optional: Background color */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visuals */
+    z-index: 1000; /* Ensure it appears above other elements */
+    overflow-y: auto; /* Allow scrolling inside the sidebar if content overflows */
+    border-right: 1px solid #ddd; /* Optional: Add a border to the right */
+}
+
+.private-dashboard-home {
+    display: flex; /* Ensure content is aligned properly */
+}
+
+.private-view-content {
+    margin-left: 250px; /* Account for the fixed sidebar width */
+    padding: 20px; /* Add some spacing for content */
+    flex-grow: 1; /* Ensure the content takes up remaining space */
+    overflow-y: auto; /* Allow vertical scrolling */
 }

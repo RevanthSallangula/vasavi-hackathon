@@ -175,7 +175,7 @@ function PrivateDashboard() {
 
     return (
         <div className="private-dashboard-home">
-            <div className="sidebar">
+            <div className="sidebar-div">
                 <SidebarPrivate onClick={handleSidebarClick} />
             </div>
 
