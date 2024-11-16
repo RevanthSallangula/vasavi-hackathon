@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../styles/GovernmentDashboard.css";
 import SidebarGovernment from "../components/SidebarGovernment";
 
-function PrivateDashboard() {
+function GovernmentDashboard() {
     const [farmerData, setFarmerData] = useState({
         farmerName: "",
         farmerID: "",
@@ -70,7 +70,7 @@ function PrivateDashboard() {
 
     return (
         <div className="government-dashboard-home">
-            <div className="sidebar">
+            <div className="sidebar-div">
                 <SidebarGovernment />
             </div>
             <div className="government-view-content">
@@ -133,4 +133,4 @@ function PrivateDashboard() {
     );
 }
 
-export default PrivateDashboard;
+export default GovernmentDashboard;
