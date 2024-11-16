@@ -281,6 +281,22 @@ server.post("/addFarmerRequest", async (req, res) => {
     }
 });
 
+server.get("/getFarmerRequests", async (req, res) => {
+    try {
+        const snapshot = await get(ref(database, "FarmerRequests"));
+        const requests = snapshot.exists()
+            ? Object.entries(snapshot.val()).map(([id, data]) => ({
+                  id,
+                  ...data,
+              }))
+            : [];
+        res.status(200).json(requests);
+    } catch (error) {
+        console.error("Error fetching requests:", error);
+        res.status(500).json({ message: "Failed to fetch requests." });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

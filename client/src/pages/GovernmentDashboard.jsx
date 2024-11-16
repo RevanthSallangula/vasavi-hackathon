@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/GovernmentDashboard.css";
 import SidebarGovernment from "../components/SidebarGovernment";
 
@@ -13,6 +13,7 @@ function GovernmentDashboard() {
         farmerClient: "",
     });
 
+    const [farmerRequests, setFarmerRequests] = useState([]); // State to hold farmer requests
     const [currentView, setCurrentView] = useState("addFarmer"); // Default view is "Add Farmer"
 
     // Handle input changes
@@ -23,6 +24,18 @@ function GovernmentDashboard() {
             [name]: value,
         });
     };
+
+    // Fetch farmer requests from the database
+    useEffect(() => {
+        if (currentView === "approveFarmers") {
+            fetch("http://localhost:3000/getFarmerRequests")
+                .then((response) => response.json())
+                .then((data) => setFarmerRequests(data))
+                .catch((error) =>
+                    console.error("Error fetching requests:", error)
+                );
+        }
+    }, [currentView]);
 
     // Add farmer data via POST request
     const addFarmer = () => {
@@ -138,9 +151,29 @@ function GovernmentDashboard() {
                         </button>
                     </div>
                 )}
-                {currentView === "approveFarmers" && <div></div>}{" "}
-                {/* Empty div for approve farmers */}
-                {/* You can add more views here as per your requirement */}
+                {currentView === "approveFarmers" && (
+                    <div>
+                        <h2>Approve Farmer Requests</h2>
+                        {farmerRequests.length > 0 ? (
+                            <ul>
+                                {farmerRequests.map((request) => (
+                                    <div className="request-approve-div">
+                                        <li key={request.id}>
+                                            <p>Crop Type: {request.cropType}</p>
+                                            <p>Land Area: {request.landArea}</p>
+                                            <button
+                                            >
+                                                Approve
+                                            </button>
+                                        </li>
+                                    </div>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No pending requests to approve.</p>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );
