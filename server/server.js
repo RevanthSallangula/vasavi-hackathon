@@ -250,6 +250,37 @@ server.post("/getIssueStatus", async (req, res) => {
     }
 });
 
+server.post("/addFarmerRequest", async (req, res) => {
+    const { cropType, landArea } = req.body;
+
+    // Validate required fields
+    if (!cropType || !landArea) {
+        return res.status(400).json({
+            message: "Both cropType and landArea are required.",
+        });
+    }
+
+    try {
+        // Generate a unique request ID (timestamp-based or UUID can be used)
+        const requestID = `REQ_${Date.now()}`;
+
+        const requestRef = ref(database, `FarmerRequests/${requestID}`);
+        await set(requestRef, {
+            cropType,
+            landArea,
+            status: "pending",
+        });
+
+        res.status(200).json({
+            message: "Request submitted successfully.",
+            requestID,
+        });
+    } catch (error) {
+        console.error("Error submitting request:", error);
+        res.status(500).json({ message: "Failed to submit request." });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

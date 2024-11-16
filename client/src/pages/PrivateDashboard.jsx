@@ -1,6 +1,25 @@
 import React, { useState, useEffect } from "react";
 import "../styles/PrivateDashboard.css";
 import SidebarPrivate from "../components/SidebarPrivate";
+import RequestFarmerForm from "../components/RequestFarmerForm";
+
+const handleFarmerRequestSubmit = (data) => {
+    fetch("http://localhost:3000/addFarmerRequest", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+        .then((response) => response.json())
+        .then((result) => {
+            console.log("Request submitted:", result.message);
+            alert("Farmer request submitted successfully.");
+        })
+        .catch((error) =>
+            console.error("Error submitting farmer request:", error)
+        );
+};
 
 const HandleViewContent = ({ view, issues, farmers, updateIssueStatus }) => {
     const renderFields = (data) => {
@@ -31,8 +50,11 @@ const HandleViewContent = ({ view, issues, farmers, updateIssueStatus }) => {
                 </ul>
             </div>
         );
+    } else if (view === "requestFarmer") {
+        // Fix for rendering RequestFarmerForm
+        return <RequestFarmerForm onSubmit={handleFarmerRequestSubmit} />;
     } else {
-        const filteredIssues = issues[view] || []; // view will be 'open', 'inProgress', or 'completed'
+        const filteredIssues = issues[view] || [];
 
         return (
             <div className="issues-container">
@@ -88,14 +110,11 @@ function PrivateDashboard() {
     });
     const [farmers, setFarmers] = useState([]);
 
-    // Fetch issues
     useEffect(() => {
+        // Fetch issues
         fetch("http://localhost:3000/getIssues")
             .then((response) => response.json())
             .then((data) => {
-                // Categorize issues based on status
-                console.log(data);
-
                 const categorizedIssues = {
                     open: [],
                     inProgress: [],
@@ -113,23 +132,20 @@ function PrivateDashboard() {
                 });
 
                 setIssues(categorizedIssues);
-                console.log(categorizedIssues, issues);
             })
             .catch((error) => console.error("Error fetching issues:", error));
     }, []);
 
-    // Fetch farmers
     useEffect(() => {
+        // Fetch farmers
         fetch("http://localhost:3000/getFarmers")
             .then((response) => response.json())
             .then((data) => {
                 setFarmers(data);
-                console.log("Farmers", farmers);
             })
             .catch((error) => console.error("Error fetching farmers:", error));
     }, []);
 
-    // Update issue status
     const updateIssueStatus = (issueID) => {
         fetch("http://localhost:3000/updateIssueStatus", {
             method: "PUT",
@@ -139,8 +155,7 @@ function PrivateDashboard() {
             body: JSON.stringify({ issueID }),
         })
             .then((response) => response.json())
-            .then((data) => {
-                console.log(data.message);
+            .then(() => {
                 // Re-fetch issues after status update
                 fetch("http://localhost:3000/getIssues")
                     .then((response) => response.json())
