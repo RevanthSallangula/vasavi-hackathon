@@ -214,7 +214,41 @@ server.post("/logInput", (req, res) => {
     res.status(200).json({ message: "Input logged successfully." });
 });
 
-// Start the server
+// Get Issue Status by issueID
+server.post("/getIssueStatus", async (req, res) => {
+    const { issueID } = req.body;
+
+    if (!issueID) {
+        return res.status(400).json({ message: "issueID is required." });
+    }
+
+    try {
+        const issuesRef = ref(database, "Issues");
+        const snapshot = await get(issuesRef);
+
+        if (snapshot.exists()) {
+            const issues = snapshot.val();
+            console.log("Issues:", issues);
+
+            const issueKey = Object.keys(issues).find(
+                (key) => String(issues[key].issueID) === String(issueID) // Convert both to string
+            );
+
+            if (!issueKey) {
+                return res.status(404).json({ message: "Issue not found." });
+            }
+
+            const issueStatus = issues[issueKey].status;
+            res.status(200).json({ issueID, status: issueStatus });
+        } else {
+            res.status(404).json({ message: "No issues found." });
+        }
+    } catch (error) {
+        console.error("Error fetching issue status:", error);
+        res.status(500).json({ message: "Failed to fetch issue status." });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
