@@ -365,10 +365,10 @@ server.get("/getFarmerRequests", async (req, res) => {
 });
 
 server.post("/approveFarmers", async (req, res) => {
-    const { farmerCropType, farmerFieldArea, requestID } = req.body; // Include requestID in the body
+    const { farmerCropType, farmerFieldArea } = req.body; // Include requestID in the body
 
     // Validate required fields
-    if (!farmerCropType || !farmerFieldArea || !requestID) {
+    if (!farmerCropType || !farmerFieldArea) {
         return res.status(400).json({
             message:
                 "FarmerCropType, FarmerFieldArea, and RequestID are required.",
@@ -388,8 +388,8 @@ server.post("/approveFarmers", async (req, res) => {
         const hiddenFarmers = snapshot.val();
         const matchingFarmers = Object.entries(hiddenFarmers).filter(
             ([id, farmer]) =>
-                farmer.farmerCropType === farmerCropType &&
-                farmer.farmerFieldArea === farmerFieldArea
+                farmer.farmerCropType == farmerCropType &&
+                farmer.farmerFieldArea == farmerFieldArea
         );
 
         if (matchingFarmers.length === 0) {
