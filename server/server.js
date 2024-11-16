@@ -225,6 +225,7 @@ server.post("/getIssueStatus", async (req, res) => {
     try {
         const issuesRef = ref(database, "Issues");
         const snapshot = await get(issuesRef);
+        console.log("ISSUE ID:", req.body);
 
         if (snapshot.exists()) {
             const issues = snapshot.val();
