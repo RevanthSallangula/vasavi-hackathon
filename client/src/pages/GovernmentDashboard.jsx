@@ -82,6 +82,39 @@ function GovernmentDashboard() {
             });
     };
 
+    // Approve farmer request
+    // Approve farmer request with crop type and field area
+    const approveRequest = (requestID) => {
+        const request = farmerRequests.find((req) => req.id === requestID);
+        const { cropType, landArea } = request;
+
+        fetch("http://localhost:3000/approveFarmers", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                farmerCropType: cropType,
+                farmerFieldArea: landArea,
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.message === "Farmers approved successfully.") {
+                    alert(data.message);
+                    setFarmerRequests(
+                        farmerRequests.filter((req) => req.id !== requestID)
+                    );
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch((error) => {
+                console.error("Error approving request:", error);
+                alert("Failed to approve request.");
+            });
+    };
+
     // Handle Sidebar Click (Switch Views)
     const handleSidebarClick = (view) => {
         setCurrentView(view);
@@ -162,6 +195,9 @@ function GovernmentDashboard() {
                                             <p>Crop Type: {request.cropType}</p>
                                             <p>Land Area: {request.landArea}</p>
                                             <button
+                                                onClick={() =>
+                                                    approveRequest(request.id)
+                                                }
                                             >
                                                 Approve
                                             </button>

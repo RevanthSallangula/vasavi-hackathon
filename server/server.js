@@ -365,12 +365,13 @@ server.get("/getFarmerRequests", async (req, res) => {
 });
 
 server.post("/approveFarmers", async (req, res) => {
-    const { farmerCropType, farmerFieldArea } = req.body;
+    const { farmerCropType, farmerFieldArea, requestID } = req.body; // Include requestID in the body
 
     // Validate required fields
-    if (!farmerCropType || !farmerFieldArea) {
+    if (!farmerCropType || !farmerFieldArea || !requestID) {
         return res.status(400).json({
-            message: "Both farmerCropType and farmerFieldArea are required.",
+            message:
+                "FarmerCropType, FarmerFieldArea, and RequestID are required.",
         });
     }
 
@@ -409,8 +410,14 @@ server.post("/approveFarmers", async (req, res) => {
             await set(hiddenFarmerRef, null);
         }
 
+        // Delete the farmer request from the 'farmerRequests' database
+        const farmerRequestsRef = ref(database, "farmerRequests");
+        const requestRef = ref(farmerRequestsRef, requestID);
+
+        await set(requestRef, null); // Delete the request
+
         res.status(200).json({
-            message: `${matchingFarmers.length} farmers approved successfully.`,
+            message: `${matchingFarmers.length} farmers approved and request deleted successfully.`,
         });
     } catch (error) {
         console.error("Error approving farmers:", error);
