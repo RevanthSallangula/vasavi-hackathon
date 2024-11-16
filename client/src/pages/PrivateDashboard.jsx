@@ -3,6 +3,14 @@ import "../styles/PrivateDashboard.css";
 import SidebarPrivate from "../components/SidebarPrivate";
 
 const HandleViewContent = ({ view, issues, farmers, updateIssueStatus }) => {
+    const renderFields = (data) => {
+        return Object.keys(data).map((key) => (
+            <div className="data" key={key}>
+                <strong>{key}:</strong> {data[key]}
+            </div>
+        ));
+    };
+
     if (view === "farmers") {
         if (!farmers || farmers.length === 0) {
             return <p>No farmers found.</p>;
@@ -16,33 +24,7 @@ const HandleViewContent = ({ view, issues, farmers, updateIssueStatus }) => {
                         <li key={index}>
                             <div className="farmer-item">
                                 <h2>Farmer Details</h2>
-                                <div className="data">
-                                    <strong>Farmer ID:</strong>{" "}
-                                    {farmer.farmerID}
-                                </div>
-                                <div className="data">
-                                    <strong>Farmer Name:</strong>{" "}
-                                    {farmer.farmerName}
-                                </div>
-                                <div className="data">
-                                    <strong>Age:</strong> {farmer.farmerAge}
-                                </div>
-                                <div className="data">
-                                    <strong>Location:</strong>{" "}
-                                    {farmer.farmerLocation}
-                                </div>
-                                <div className="data">
-                                    <strong>Field Area:</strong>{" "}
-                                    {farmer.farmerFieldArea}
-                                </div>
-                                <div className="data">
-                                    <strong>Crop Type:</strong>{" "}
-                                    {farmer.farmerCropType}
-                                </div>
-                                <div className="data">
-                                    <strong>Client:</strong>{" "}
-                                    {farmer.farmerClient}
-                                </div>
+                                {renderFields(farmer)}
                             </div>
                         </li>
                     ))}
@@ -77,25 +59,7 @@ const HandleViewContent = ({ view, issues, farmers, updateIssueStatus }) => {
                             <li key={index}>
                                 <div className="issue-item">
                                     <h2>Issue Tracker</h2>
-                                    <div className="data">
-                                        <strong>Issue ID:</strong>{" "}
-                                        {issue.issueID}
-                                    </div>
-                                    <div className="data">
-                                        <strong>Issue Name:</strong>{" "}
-                                        {issue.issueName}
-                                    </div>
-                                    <div className="data">
-                                        <strong>Farmer ID:</strong>{" "}
-                                        {issue.farmerID}
-                                    </div>
-                                    <div className="data">
-                                        <strong>Farmer Name:</strong>{" "}
-                                        {issue.farmerName}
-                                    </div>
-                                    <div className="data">
-                                        <strong>Status:</strong> {issue.status}
-                                    </div>
+                                    {renderFields(issue)}
                                     {view !== "completed" && (
                                         <button
                                             onClick={() =>
